@@ -1,7 +1,7 @@
 var services = {};
 var accounts = [];
 var results = {};
-var tabs = [];
+var tabs = {};
 var background = {
     accountsTimers : [],
 	stopAccountsCheckers:function (){
@@ -67,11 +67,12 @@ var background = {
                     }
 				},
                 openLink:function(url){
-                    if(tabs[this.item]){
-                            chrome.tabs.update(tabs[this.item].id,{url:url,selected:true});
+					if(tabs[this.index]){
+                            chrome.tabs.update(tabs[this.index].id,{url:url,selected:true});
                     }else{
+						var that=this;
                         chrome.tabs.create({url:url}, function(tab){
-                            tabs[this.item] = tab;
+							tabs[that.index] = tab;
                         });
                     }
                 },

@@ -50,8 +50,8 @@ services['gmail'] = function(customOptions){
         baseUrl:function(){
             if(!options.baseUrl){
                 var url = 'https://mail.google.com/';
-                url += (this.options.domain?'a/'+this.options.domain:'mail') + '/';
-                if(!this.options.domain && this.options.accountNumber!==null){    url += 'u/'+(parseInt(this.options.accountNumber,10) || 0) + '/';   }
+                url += (this.options.accountNumber===null && this.options.domain?'a/'+this.options.domain:'mail') + '/';
+                if(this.options.accountNumber!==null){    url += 'u/'+(parseInt(this.options.accountNumber,10) || 0) + '/';   }
                 this._log('Base url :' + url);
                 options.baseUrl = url;
             }
@@ -76,7 +76,7 @@ services['gmail'] = function(customOptions){
                         title:msg.find('title').text() || '',
                         summary:msg.find('summary').text() || '',
                         link:msg.find('link').attr('href') || '',
-                        author:msg.find('author>name').text() + '(' + msg.find('author>email').text() + ')' || ''
+                        author:msg.find('author>name').text() + ' (' + msg.find('author>email').text() + ')' || ''
                     };
                 });
             }

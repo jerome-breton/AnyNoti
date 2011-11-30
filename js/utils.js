@@ -12,7 +12,8 @@ if(typeof accounts !== 'undefined'){
         name:'Sqli (gmail)',
         type:'gmail',
         serviceOptions : {
-            accountNumber:1
+            accountNumber:1,
+			domain:'sqli.com'
         },
         frequency:'15'
     };
@@ -39,11 +40,10 @@ var utils = {
             //Look through all the pages in this extension to find one we can use.
             var views = chrome.extension.getViews();
             for (var i = 0; i < views.length; i++) {
-                var view = views[i];
 
                 //If this view has the right URL and hasn't been used yet...
-                if (view.location.href == viewTabUrl) {
-                    this._backgroundPage = view;
+                if (views[i].location.href == viewTabUrl) {
+                    this._backgroundPage = views[i];
                     break;
                 }
             }

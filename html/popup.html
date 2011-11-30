@@ -7,24 +7,39 @@
                 font-family: sans-serif;
                 min-width:357px;
                 overflow-x:hidden;
-                font-size: 10px;
+                font-size: 11px;
 			}
 
 			h1{
-                font-size: 14px;
-                background: -webkit-linear-gradient(linear, 0% 0%, 0% 100%, from(#b60000), to(#ED9090));
+                font-size: 13px;
+                background: -webkit-linear-gradient(top, #850000 0%, #C75B5B 65%, #850000 100%);
+				padding:3px;
+				margin:0 0 5px;
                 border-radius: 5px;
-                color:white
+				border:solid 1px #850000;
+                color:white;
             }
 
             h2{
                 font-size: 12px;
+				margin:0;
             }
 
+			h3{
+				font-size: 10px;
+				margin:0;
+			}
+
+			p{
+				margin:0;
+			}
+
             article{
-                /*background: gradient(linear, 0% 0%, 0% 100%, from(#b60000), to(##ED9090));*/
+                background: -webkit-radial-gradient(top right, ellipse cover, rgba(255, 255, 255, 1) 0%,rgba(241, 241, 241, 1) 50%,rgba(225, 225, 225, 1) 51%,rgba(246, 246, 246, 1) 100%);
                 border-radius: 5px;
-                border:1px #ccc;
+				padding:0 5px;
+				margin:0 0 5px;
+                border:solid 1px rgba(241, 241, 241, 1);
             }
 		</style>
 	</head>
@@ -33,14 +48,13 @@
 
 
 	<script>
-        var results = utils.getBackgroundPage().results;
-        jQuery.each(results,function(index, result){
+        jQuery.each(utils.getBackgroundPage().results,function(index, result){
             var accountSection = document.createElement("section");
             var accountTitle = document.createElement('h1');
             if(result.url){
                 accountTitle.style.cursor="pointer";
                 accountTitle.onclick=function(){
-                    result.account.openLink.call(result.account,result.url);
+                    result.account.openLink(result.url);
                 };
             }
             accountTitle.innerText = result.text;
@@ -49,24 +63,29 @@
                 var list = result.account.service.itemList();
                 jQuery.each(list,function(id,msg){
                     var accountMessage = document.createElement('article');
+					if(msg.link){
+						accountMessage.style.cursor="pointer";
+						accountMessage.onclick=function(){
+							result.account.openLink(msg.link);
+						};
+					}
+					accountSection.appendChild(accountMessage);
+
                     var accountMessageTitle = document.createElement('h2');
-                    if(msg.link){
-                        accountMessageTitle.style.cursor="pointer";
-                        accountMessageTitle.onclick=function(){
-                            result.account.openLink.call(result.account,msg.link);
-                        };
-                    }
                     accountMessageTitle.innerText = msg.title;
+					accountMessageTitle.style.float = 'left';
                     accountMessage.appendChild(accountMessageTitle);
-                    var accountMessageDetail = document.createElement('div');
-                    var accountMessageDetailSummary = document.createElement('p');
-                    accountMessageDetailSummary.innerText = msg.summary;
-                    var accountMessageDetailAuthor = document.createElement('p');
-                    accountMessageDetailAuthor.innerText = msg.author;
-                    accountMessageDetail.appendChild(accountMessageDetailAuthor);
-                    accountMessageDetail.appendChild(accountMessageDetailSummary);
-                    accountMessage.appendChild(accountMessageDetail);
-                    accountSection.appendChild(accountMessage);
+
+					var accountMessageAuthor = document.createElement('h3');
+					accountMessageAuthor.style.float = 'right';
+					accountMessageAuthor.style.fontStyle = 'italic';
+                    accountMessageAuthor.innerText = msg.author;
+					accountMessage.appendChild(accountMessageAuthor);
+
+					var accountMessageSummary = document.createElement('p');
+					accountMessageSummary.style.clear = 'both';
+					accountMessageSummary.innerText = msg.summary;
+					accountMessage.appendChild(accountMessageSummary);
                 });
             }
             document.body.appendChild(accountSection);
