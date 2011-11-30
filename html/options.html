@@ -1,0 +1,125 @@
+<html>
+	<head>
+		<title>AnyNoti Options</title>
+		<link href="../css/chrome_shared.css" rel="stylesheet" type="text/css">
+		<script src="../js/jquery-1.7.1.min.js"></script>
+		<script src="../js/jquery.hurl.js"></script>
+        <script src="../js/utils.js"></script>
+		<script src="../js/options.js"></script>
+	</head>
+	<body i18n-values=".style.fontFamily:fontfamily;" style="font-family: Arial, sans-serif; " class="hide-some-focus-outlines">
+
+<div id="main-content">
+  <div id="navbar-container">
+     <h1 id="navbar-content-title" i18n-content="title">AnyNoti</h1>
+     <ul id="navbar">
+		 <!--li id="searchPageNav" class="navbar-item" pagename="search" role="" tabindex="-1"><input id="search-field" type="search" incremental="" placeholder="Options de recherche" aria-label="Options de recherche"></li-->
+		 <li id="accountsPageNav" class="navbar-item" pagename="accounts" role="tab" tabindex="-1">Comptes</li>
+		 <li id="servicesPageNav" class="navbar-item" pagename="services" role="tab" tabindex="-1">Services</li>
+		 <li id="advancedPageNav" class="navbar-item" pagename="advanced" role="tab" tabindex="-1">Options avanc�es</li>
+	 </ul>
+  </div>
+
+  <div id="mainview">
+     <div id="managed-prefs-banner" class="managed-prefs-banner" hidden="">
+       <span id="managed-prefs-icon" class="managed-prefs-icon"></span>
+       <span id="managed-prefs-text" class="managed-prefs-text"></span>
+     </div>
+     <div id="subpage-backdrop" hidden=""></div>
+     <div id="mainview-content">
+       <div id="page-container">
+         <!-- Please keep the main pages in desired order of display.  This will
+              allow search results to display in the desired order. -->
+         <!--div id="searchPage" class="page" hidden="">
+  <h1 i18n-content="searchPage">R�sultats de recherche</h1>
+  <div id="searchPageNoMatches">
+    <p i18n-content="searchPageNoMatches">Aucune correspondance trouv�e</p>
+    <p><span i18n-content="searchPageHelpLabel">Vous ne trouvez pas ce que vous recherchez&nbsp;?</span>
+      <a target="_blank" i18n-content="searchPageHelpTitle" i18n-values="href:searchPageHelpURL" href="https://www.google.com/support/chrome/?hl=fr">Aide Google Chrome</a>
+    </p>
+  </div>
+</div-->
+
+         <div id="accountsPage" class="page" hidden="">
+  <h1 i18n-content="accountsPage">Comptes</h1>
+  <div class="displaytable">
+    <section id="startupSection">
+      <h3 i18n-content="startupGroupName">Au d�marrage</h3>
+      <div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="startup" value="0" pref="session.restore_on_startup" metric="Options_Startup_Homepage">
+            <span i18n-content="startupShowDefaultAndNewTab">Ouvrir la page d'accueil</span>
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="startup" value="1" pref="session.restore_on_startup" metric="Options_Startup_LastSession">
+            <span i18n-content="startupShowLastSession">Rouvrir les derni�res pages ouvertes</span>
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input id="startupShowPagesButton" type="radio" name="startup" pref="session.restore_on_startup" value="4" metric="Options_Startup_Custom">
+            <span id="startupShowPagesLabel" i18n-content="startupShowPages">Ouvrir les pages suivantes&nbsp;:</span>
+          </label>
+        </div>
+        <div class="suboption">
+          <div id="startupPageManagement" class="settings-list">
+            <list id="startupPagesList" role="listbox" tabindex="0" inlineeditable="" disabled="disabled"><div class="spacer" style="height: 0px; "></div><div role="listitem" class="deletable-item" draggable="true"><div><div class="title favicon-cell weakrtl" style="background-image: url(chrome://favicon/https://plus.im/#); " title="">https://plus.im/#</div><div class="url weakrtl"><div class="static-text" displaymode="static">https://plus.im/#</div><input type="text" displaymode="edit" required="" class="weakrtl" disabled=""></div></div><button class="raw-button close-button custom-appearance"></button></div><div role="listitem" class="deletable-item"><div><div class="title favicon-cell weakrtl">Ajouter une page</div><div class="url weakrtl"><input type="text" required="" class="weakrtl" disabled=""></div></div><button class="raw-button close-button custom-appearance" disabled=""></button></div><div class="spacer" style="height: 0px; "></div></list>
+            <div>
+              <button id="startupUseCurrentButton" i18n-content="startupUseCurrent" disabled="">Utiliser les pages actuelles</button>
+            </div>
+          </div>
+          <div id="startupPagesListDropmarker"></div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h3 i18n-content="homepageGroupName">Page d'accueil</h3>
+      <div>
+        <div class="radio">
+          <label>
+            <input id="homepageUseNTPButton" type="radio" name="homepage" value="true" metric="Options_Homepage_IsNewTabPage" pref="homepage_is_newtabpage">
+            <span i18n-content="homepageUseNewTab">Afficher la page "Nouvel onglet"</span>
+          </label>
+        </div>
+        <div id="customHomePageGroup">
+          <div class="radio">
+            <label>
+              <input id="homepageUseURLButton" type="radio" name="homepage" value="false" metric="Options_Homepage_IsNewTabPage" pref="homepage_is_newtabpage">
+              <span i18n-content="homepageUseURL">Ouvrir cette page&nbsp;:</span>
+            </label>
+          </div>
+          <div>
+            <input id="homepageURL" class="weakrtl favicon-cell" type="url" data-type="url" pref="homepage" disabled="">
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+         <div id="servicesPage" class="page" hidden="">
+  <h1 i18n-content="servicesPage">Services</h1>
+  <div class="displaytable">
+
+    
+  </div>
+</div>
+
+         
+         <div id="advancedPage" class="page" hidden="">
+  <h1 i18n-content="advancedPage">Options avanc�es</h1>
+  <div class="displaytable">
+    
+  </div>
+</div>
+
+         
+
+
+
+		
+	</body>
+</html>

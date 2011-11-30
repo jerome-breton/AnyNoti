@@ -1,0 +1,75 @@
+<html>
+	<head>
+		<script src="../js/jquery-1.7.1.min.js"></script>
+        <script src="../js/utils.js"></script>
+		<style>
+			body {
+                font-family: sans-serif;
+                min-width:357px;
+                overflow-x:hidden;
+                font-size: 10px;
+			}
+
+			h1{
+                font-size: 14px;
+                background: -webkit-linear-gradient(linear, 0% 0%, 0% 100%, from(#b60000), to(#ED9090));
+                border-radius: 5px;
+                color:white
+            }
+
+            h2{
+                font-size: 12px;
+            }
+
+            article{
+                /*background: gradient(linear, 0% 0%, 0% 100%, from(#b60000), to(##ED9090));*/
+                border-radius: 5px;
+                border:1px #ccc;
+            }
+		</style>
+	</head>
+	<body></body>
+
+
+
+	<script>
+        var results = utils.getBackgroundPage().results;
+        jQuery.each(results,function(index, result){
+            var accountSection = document.createElement("section");
+            var accountTitle = document.createElement('h1');
+            if(result.url){
+                accountTitle.style.cursor="pointer";
+                accountTitle.onclick=function(){
+                    result.account.openLink.call(result.account,result.url);
+                };
+            }
+            accountTitle.innerText = result.text;
+            accountSection.appendChild(accountTitle);
+            if(result.account.service.implements.itemList){
+                var list = result.account.service.itemList();
+                jQuery.each(list,function(id,msg){
+                    var accountMessage = document.createElement('article');
+                    var accountMessageTitle = document.createElement('h2');
+                    if(msg.link){
+                        accountMessageTitle.style.cursor="pointer";
+                        accountMessageTitle.onclick=function(){
+                            result.account.openLink.call(result.account,msg.link);
+                        };
+                    }
+                    accountMessageTitle.innerText = msg.title;
+                    accountMessage.appendChild(accountMessageTitle);
+                    var accountMessageDetail = document.createElement('div');
+                    var accountMessageDetailSummary = document.createElement('p');
+                    accountMessageDetailSummary.innerText = msg.summary;
+                    var accountMessageDetailAuthor = document.createElement('p');
+                    accountMessageDetailAuthor.innerText = msg.author;
+                    accountMessageDetail.appendChild(accountMessageDetailAuthor);
+                    accountMessageDetail.appendChild(accountMessageDetailSummary);
+                    accountMessage.appendChild(accountMessageDetail);
+                    accountSection.appendChild(accountMessage);
+                });
+            }
+            document.body.appendChild(accountSection);
+        });
+	</script>
+</html>
