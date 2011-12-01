@@ -13,7 +13,8 @@ if(typeof accounts !== 'undefined'){
         type:'gmail',
         serviceOptions : {
             accountNumber:1,
-			domain:'sqli.com'
+			domain:'sqli.com',
+            color:[0,0,0,255]
         },
         frequency:'15'
     };
@@ -23,7 +24,8 @@ if(typeof accounts !== 'undefined'){
         type:'gmail',
         serviceOptions : {
             accountNumber:0,
-            label:'newsletter'
+            label:'newsletter',
+            color:[0,0,133,255]
         },
         frequency:'15'
     };
@@ -49,5 +51,16 @@ var utils = {
             }
         }
         return this._backgroundPage;
+    },
+    getLighterColor:function(color){
+        return [
+            Math.min(255,color[0]+128),
+            Math.min(255,color[1]+128),
+            Math.min(255,color[2]+128),
+            Math.min(255,color[2]+128),
+        ];
+    },
+    getCssRgba:function(color){
+        return 'rgba('+color[0]+','+color[1]+','+color[2]+','+Math.round(color[3]/255,2)+')'
     }
 };

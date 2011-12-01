@@ -8,7 +8,8 @@
 	},
 	"permissions": [
 		"http://*/*",
-		"https://*/*"
+		"https://*/*",
+        "chrome://favicon/"
 	],
 	"background_page" : "html/background.html",
 	"options_page": "html/options.html"

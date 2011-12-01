@@ -86,13 +86,19 @@ var background = {
 
 	refreshBadge:function(){
 		var count = 0;
+        var accounts = 0;
+        var badgeColor = null;
 		jQuery.each(results,function(index,result){
 			if(result.count){
 				var localCount = parseInt(result.count,10);
                 if(localCount<0){
                     results[index]['error'] = true;
-                }else{
+                }else if(localCount>0){
                     count += localCount;
+                    accounts += 1;
+                    if(result.account.service.implements.color){
+                        badgeColor = result.account.service.color();
+                    }
                 }
 			}
 		});
@@ -101,6 +107,10 @@ var background = {
 		}else{
 			chrome.browserAction.setBadgeText({text:''});
 		}
+        if(!badgeColor || accounts!=1){
+            badgeColor = [255,0,0,255];
+        }
+        chrome.browserAction.setBadgeBackgroundColor({color:badgeColor});
 	},
     _log:function(msg){
         console.log('[background]'+msg);
@@ -110,9 +120,14 @@ var background = {
 $(function(){background.launchAccountsCheckers();});
 
 chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
+    var refreshFeeds = false;
 	jQuery.each(tabs,function(index, tab){
 		if(tab && tab.id == tabId){
 			tabs[index] = null;
+            refreshFeeds = true;
 		}
 	});
+    if(refreshFeeds){
+        background.launchAccountsCheckers();
+    }
 });

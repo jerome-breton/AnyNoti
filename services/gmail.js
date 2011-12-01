@@ -11,7 +11,9 @@ services['gmail'] = function(customOptions){
             refresh:true,
             count:true,
             homeUrl:true,
-            itemList:true
+            itemList:true,
+            favicon:true,
+            color:true
         },
         options:options,
         refresh:function(callback){
@@ -81,6 +83,16 @@ services['gmail'] = function(customOptions){
                 });
             }
             return list;
+        },
+        favicon:function(){
+            if(options.domain){
+                return "chrome://favicon/http://"+options.domain+"/";
+            }else{
+                return "chrome://favicon/http://gmail.com/";
+            }
+        },
+        color:function(){
+            return options.color || [133,0,0,255];
         },
         _getFeedUrl:function(){
             if(!options.feedUrl){
