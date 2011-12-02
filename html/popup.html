@@ -92,7 +92,7 @@
             }
             accountSection.appendChild(accountTitle);
             if(result.account.service.implements.itemList){
-                var list = result.account.service.itemList();
+                var list = result.account.service.itemList.call(result.account.service);
                 jQuery.each(list,function(id,msg){
                     var accountMessage = document.createElement('article');
                     if(result.account.service.implements.color){
