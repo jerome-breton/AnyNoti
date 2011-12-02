@@ -13,7 +13,8 @@ services['gmail'] = function(customOptions,logFn){
             homeUrl:true,
             itemList:true,
             favicon:true,
-            color:true
+            color:true,
+			title:true,
         },
         options:options,
         refresh:function(callback){ this._log('refresh');
@@ -92,8 +93,14 @@ services['gmail'] = function(customOptions,logFn){
             }
         },
         color:function(){ this._log('color');
-            return options.color || [133,0,0,255];
+            return options.color || [225,30,30,255];
         },
+		title:function(){	this._log('title');
+			if(this._feed.find && this._feed.find('feed>title')){
+				return this._feed.find('feed>title').text();
+			}
+			return false;
+		},
         _getFeedUrl:function(){ this._log('_getFeedUrl');
             if(!options.feedUrl){
                 var url = this.baseUrl();
