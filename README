@@ -1,1 +1,10 @@
-This file was created by JetBrains PhpStorm (PhpStorm) PS-110.518 for binding GitHub repository
+This project is a Google Chrome Extension.
+
+Its goal is to provide a unified notification icon merging multiple services.
+
+TODO:
+- Work on options screen
+- Implement new services (Google Reader, Twitter, Facebook, Google+, Generic RSS/Atom, Google Agenda, Linkedin, etc.)
+- i18n
+- Toasters
+- Better icon (transparent if nothing else favicon patchwork ?)
