@@ -68,9 +68,15 @@ jQuery(function(){
 				}
 
 				//Message author
-				if (msg.author) {
+				if (msg.author && (msg.author.name || msg.author.email)) {
 					var accountMessageAuthor = document.createElement('h3');
-					accountMessageAuthor.innerText = msg.author;
+					if(msg.author.name && !msg.author.email){
+						accountMessageAuthor.innerText = msg.author.name;
+					}else if(!msg.author.name && msg.author.email){
+						accountMessageAuthor.innerText = msg.author.email;
+					}else if(msg.author.name && msg.author.email){
+						accountMessageAuthor.innerText = msg.author.name + ' (' + msg.author.email + ')';
+					}
 					accountMessage.appendChild(accountMessageAuthor);
 				}
 

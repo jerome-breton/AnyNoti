@@ -85,6 +85,7 @@ var background = {
                             results[this.index] = { account:this    };
                         }
                         if(this.service.implements.count){
+							results[this.index]['account'] = this;
                             results[this.index]['count'] = this.service.count();
                             if(this.service.implements.homeUrl){
                                 results[this.index]['url'] = this.service.homeUrl();
