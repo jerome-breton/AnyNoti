@@ -1,19 +1,42 @@
+//List of services helper by code
 var services = {};
+//List user accounts settings
 var accounts = [];
+//List results fo accounts checking
 var results = {};
+//List opened tabs index by accounts indexes
 var tabs = {};
+
+//Background worker
 var background = {
+    //List of timers (permits stoping them)
     accountsTimers : [],
-	stopAccountsCheckers:function (){
-		console.log('stopAccountsCheckers');
+
+    //Launch background processes
+    init:function(){    this._log('init');
+
+        //Create accounts checkers objects and time them
+        this.launchAccountsCheckers();
+
+        //Observes tabs closing to remove entries from tabs
+        //permitting opening of a new tab on user click
+        var that = this;
+        chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
+            that.tabRemoved(tabId,removeInfo);
+        });
+    },
+
+    //Stop accounts checkers objects from checking
+	stopAccountsCheckers:function (){		this._log('stopAccountsCheckers');
 		jQuery.each(this.accountsTimers,function(index,timer){
 			window.clearTimeout(timer);
 		});
 	},
 
+    //Create accounts checkers objects and time them
 	launchAccountsCheckers:function(){
 		this.stopAccountsCheckers();
-		console.log('launchAccountsCheckers');
+        this._log('launchAccountsCheckers');
         var that=this;
 		jQuery.each(accounts,function(index, accountParams){
             that._log('launching account '+index);
@@ -24,31 +47,31 @@ var background = {
 				frequency: 		accountParams.frequency || '60',	    //refresh frequency in sec
 				index:(index || 0),
                 tab:null,
-				launchChecker:function(){
+				launchChecker:function(){   this._log('launchChecker');
 					var timeout = (this.frequency || 60);   //defaults to 60sec
 					timeout = Math.round((parseInt(timeout,10) + (Math.random() - 0.5) * 10) * 1000);  //Adds +-5sec random
 					this._log('launchAccountChecker in '+timeout/1000 +'s');
 					var that=this;
 					background.accountsTimers[this.index] = window.setTimeout(function(){	that.check();	},timeout);
 				},
-				check:function(){
-					this._log('checkAccount');
+				check:function(){   this._log('checkAccount');
+                    var that = this;
 					if(!this.service){
-						var service = services[this.type](this.serviceOptions);
+						var service = services[this.type](
+                            this.serviceOptions,
+                            function(msg){that._log(msg);}
+                        );
 						if(!service){    return; }
 						this.service = service;
 					}
 					if(this.service.implements.refresh){
-						this._log(this.type + '.checkAccount');
-						var that=this;
 						this.service.refresh(function(result){
 							that.result = result;
 							that.refreshCallback();
 						});
 					}
 				},
-				refreshCallback:function(){
-					this._log('checkAccountCallback');
+				refreshCallback:function(){ this._log('checkAccountCallback');
 					this.launchChecker();
 					if(this.result.isError){
 						alert(this.result.errorMessage || 'Unknown Error');
@@ -66,7 +89,7 @@ var background = {
                         }
                     }
 				},
-                openLink:function(url){
+                openLink:function(url){ this._log('openLink');
 					if(tabs[this.index]){
                             chrome.tabs.update(tabs[this.index].id,{url:url,selected:true});
                     }else{
@@ -77,14 +100,15 @@ var background = {
                     }
                 },
 				_log:function(msg){
-					console.log('[account-'+this.index+']'+msg);
+					that._log('[account-'+this.index+']'+msg);
 				}
 			}}(index,accountParams);
+            //Check on start
 			window.setTimeout(function(){	account.check();	},Math.round(Math.random()*2000));
 		});
 	},
 
-	refreshBadge:function(){
+	refreshBadge:function(){ this._log('refreshBadge');
 		var count = 0;
         var accounts = 0;
         var badgeColor = null;
@@ -112,22 +136,21 @@ var background = {
         }
         chrome.browserAction.setBadgeBackgroundColor({color:badgeColor});
 	},
+    tabRemoved:function(tabId,removeInfo){ this._log('tabRemoved');
+        var refreshFeeds = false;
+        jQuery.each(tabs,function(index, tab){
+            if(tab && tab.id == tabId){
+                tabs[index] = null;
+                refreshFeeds = true;
+            }
+        });
+        if(refreshFeeds){
+            this.launchAccountsCheckers();
+        }
+    },
     _log:function(msg){
-        console.log('[background]'+msg);
+        utils._log('[bg]'+msg);
     }
 };
 
-$(function(){background.launchAccountsCheckers();});
-
-chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
-    var refreshFeeds = false;
-	jQuery.each(tabs,function(index, tab){
-		if(tab && tab.id == tabId){
-			tabs[index] = null;
-            refreshFeeds = true;
-		}
-	});
-    if(refreshFeeds){
-        background.launchAccountsCheckers();
-    }
-});
+$(function(){background.init();});

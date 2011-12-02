@@ -1,4 +1,4 @@
-services['gmail'] = function(customOptions){
+services['gmail'] = function(customOptions,logFn){
     var options = {
         domain:null,        //if using non migrated Google Apps, then give a string of domain (ie: example.com)
         accountNumber:null, //if using multi-account, then give the account number (the one behind /u/ in the GMail url)
@@ -16,7 +16,7 @@ services['gmail'] = function(customOptions){
             color:true
         },
         options:options,
-        refresh:function(callback){
+        refresh:function(callback){ this._log('refresh');
             jQuery.ajax( this._getFeedUrl() , {
                 context:this,
                 success:function(data, textStatus, jqXHR){
@@ -44,12 +44,12 @@ services['gmail'] = function(customOptions){
                 dataType:'xml'
             });
         },
-        count:function(){
+        count:function(){ this._log('count');
             if(!this._feed.find){   return -1;  }
             this._log('Found '+this._feed.find('feed>fullcount').text()+' messages');
             return this._feed.find('feed>fullcount').text();
         },
-        baseUrl:function(){
+        baseUrl:function(){ this._log('baseUrl');
             if(!options.baseUrl){
                 var url = 'https://mail.google.com/';
                 url += (this.options.accountNumber===null && this.options.domain?'a/'+this.options.domain:'mail') + '/';
@@ -59,7 +59,7 @@ services['gmail'] = function(customOptions){
             }
             return options.baseUrl;
         },
-        homeUrl:function(){
+        homeUrl:function(){ this._log('homeUrl');
             if(!options.homeUrl){
                 var url = this.baseUrl();
                 url += (this.options.label?'#label/'+this.options.label:'');
@@ -68,7 +68,7 @@ services['gmail'] = function(customOptions){
             }
             return options.homeUrl;
         },
-        itemList:function(){
+        itemList:function(){ this._log('itemList');
             var list = {};
             if(this._feed.find){
                 jQuery.each(this._feed.find('feed>entry'),function(index,msg){
@@ -84,17 +84,17 @@ services['gmail'] = function(customOptions){
             }
             return list;
         },
-        favicon:function(){
+        favicon:function(){ this._log('favicon');
             if(options.domain){
                 return "chrome://favicon/http://"+options.domain+"/";
             }else{
                 return "chrome://favicon/http://gmail.com/";
             }
         },
-        color:function(){
+        color:function(){ this._log('color');
             return options.color || [133,0,0,255];
         },
-        _getFeedUrl:function(){
+        _getFeedUrl:function(){ this._log('_getFeedUrl');
             if(!options.feedUrl){
                 var url = this.baseUrl();
                 url += 'feed/atom/';
@@ -106,7 +106,7 @@ services['gmail'] = function(customOptions){
 
         },
         _log:function(msg){
-            console.log('[gmail]'+msg);
+            logFn('[gmail]'+msg);
         }
     };
 };
