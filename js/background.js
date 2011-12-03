@@ -105,6 +105,9 @@ var background = {
 
 				//Provides functionnality to open links in the same tab per account
                 openLink:function(url){ this._log('openLink');
+					if(this.service.parameters.preventTabReloading && url.indexOf('#')==-1){
+						url += '#'+Math.round(Math.random()*10000);
+					}
 					if(tabs[this.index]){
                             chrome.tabs.update(tabs[this.index].id,{url:url,selected:true});
                     }else{

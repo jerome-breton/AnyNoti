@@ -1,6 +1,4 @@
-serviceCode = 'gmail';
-
-services[serviceCode] = function(customOptions,logFn){
+services['gmail'] = function(customOptions,logFn){
     var options = {
         domain:null,        //if using non migrated Google Apps, then give a string of domain (ie: example.com)
         accountNumber:null, //if using multi-account, then give the account number (the one behind /u/ in the GMail url)
@@ -18,6 +16,7 @@ services[serviceCode] = function(customOptions,logFn){
             color:true,
 			title:true
         },
+		serviceCode:'gmail',
         options:options,
         refresh:function(callback){ this._log('refresh');
             jQuery.ajax( this._feedUrl() , {

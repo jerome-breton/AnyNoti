@@ -1,6 +1,4 @@
-serviceCode = 'noop';
-
-services[serviceCode] = function(customOptions,logFn){
+services['noop'] = function(customOptions,logFn){
     var options = {};
     jQuery.extend(options,customOptions);
     return {
@@ -13,7 +11,10 @@ services[serviceCode] = function(customOptions,logFn){
             color:false,
 			title:false
         },
-		serviceCode:serviceCode,
+		parameters:{
+			preventTabReloading:true	//Urls are opened with a trailing #0 preventing tab to be reload if the same url is called
+		},
+		serviceCode:'noop',
         options:options,
 
 		/**
@@ -47,21 +48,21 @@ services[serviceCode] = function(customOptions,logFn){
 
 		/**
 		 * Returns an object of unread items
+		 *
+		 * list[{msgUniqueId}] = {
+		 *		title:{title of message} || '',
+		 *		summary:{summary of message} || '',
+		 * 		link:{link to the message on website} || '',
+		 * 		author:{
+		 * 			name:{author name} || '',
+		 *			email:{author email} || ''
+		 *  	}
+		 * };
+		 *
 		 */
         itemList:function(){
 			this._log('itemList');
 			var list = {};
-			/*
-			list[{msgUniqueId}] = {
-				title:{title of message} || '',
-				summary:{summary of message} || '',
-				link:{link to the message on website} || '',
-				author:{
-					name:{author name} || '',
-					email:{author email} || ''
-				}
-			};
-			*/
 			return list;
 		},
 
