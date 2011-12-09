@@ -55,7 +55,7 @@ services[serviceCode] = function(customOptions,logFn){
         homeUrl:function(){ this._log('homeUrl');
             if(!options.homeUrl){
                 var url = this._baseUrl();
-                url += (this.options.label?'#label/'+this.options.label:'');
+                url += (this.options.label?'#label/'+this.options.label:'#inbox');
                 this._log('Home url :' + url);
                 options.homeUrl = url;
             }
