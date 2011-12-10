@@ -41,10 +41,11 @@ var background = {
 		jQuery.each(accounts,function(index, accountParams){
             that._log('launching account '+index);
 			var account = function(index,accountParams){	return {
-				name: 			accountParams.name || 'Account Name',	//account name
-				type: 			accountParams.type || 'noop',	        //service code
-				serviceOptions: accountParams.serviceOptions || {},		//service custom options
-				frequency: 		accountParams.frequency || '60',	    //refresh frequency in sec
+				name: 				accountParams.name || 'Account Name',	//account name
+				type: 				accountParams.type || 'noop',	        //service code
+				serviceOptions:		accountParams.serviceOptions || {},		//service custom options
+				serviceOverloads:	accountParams.serviceOverloads || {},	//overload service functions results
+				frequency:			accountParams.frequency || '60',	    //refresh frequency in sec
 				index:(index || 0),
 
 				//Creates a timeout to check for messages
@@ -121,6 +122,16 @@ var background = {
                         });
                     }
                 },
+
+				//Returns the account color
+				color:function(){ this._log('color');
+					if(this.serviceOverloads.color){
+						return this.serviceOverloads.color;
+					}else if(this.service.implements.color){
+						return this.service.color();
+					}
+					return null;
+				},
 				_log:function(msg){
 					that._log('[account-'+this.index+']'+msg);
 				}
@@ -143,9 +154,7 @@ var background = {
                 }else if(localCount>0){
                     count += localCount;
                     accounts += 1;
-                    if(result.account.service.implements.color){
-                        badgeColor = result.account.service.color();
-                    }
+					badgeColor = result.account.color() || badgeColor;
                 }
 			}
 		});

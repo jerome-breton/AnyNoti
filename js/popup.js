@@ -40,15 +40,14 @@ jQuery(function(){
         }
 
 		//With service color
-        if(result.account.service.implements.color){
-            var c = [utils.color.getDarker(result.account.service.color()), utils.color.getLighter(result.account.service.color())];
-            accountTitle.style.background = '-webkit-linear-gradient(top, '
-                    +utils.color.toCssRgba(c[0])+' 0%, '
-                    +utils.color.toCssRgba(c[1])+' 65%, '
-                    +utils.color.toCssRgba(c[0])+' 100%)';
-            accountTitle.style.borderColor = utils.color.toCssRgba(c[0]);
-            accountFavicon.style.borderColor = utils.color.toCssRgba(c[0]);
-        }
+		var color = result.account.color() || [128,128,128,255];
+		color = [utils.color.getDarker(color), utils.color.getLighter(color)];
+		accountTitle.style.background = '-webkit-linear-gradient(top, '
+				+utils.color.toCssRgba(color[0])+' 0%, '
+				+utils.color.toCssRgba(color[1])+' 65%, '
+				+utils.color.toCssRgba(color[0])+' 100%)';
+		accountTitle.style.borderColor = utils.color.toCssRgba(color[0]);
+		accountFavicon.style.borderColor = utils.color.toCssRgba(color[0]);
 
 		//If the service can display a list of messages
         if(result.account.service.implements.itemList){
@@ -62,9 +61,7 @@ jQuery(function(){
 				accountSection.appendChild(accountMessage);
 
 				//With service color
-                if(result.account.service.implements.color){
-                    accountMessage.style.borderColor = utils.color.toCssRgba(c[0]);
-                }
+               	accountMessage.style.borderColor = utils.color.toCssRgba(color[0]);
 
 				//With a link to the message url
                 if(msg.link){

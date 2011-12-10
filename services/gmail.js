@@ -87,7 +87,7 @@ services['gmail'] = function(customOptions,logFn){
             }
         },
         color:function(){ this._log('color');
-            return options.color || [225,30,30,255];
+            return [225,30,30,255];
         },
 		title:function(){	this._log('title');
 			if(this._feed.find && this._feed.find('feed>title')){

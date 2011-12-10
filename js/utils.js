@@ -13,9 +13,11 @@ if(typeof accounts !== 'undefined'){
         type:'gmail',
         serviceOptions : {
             accountNumber:1,
-			domain:'sqli.com',
-            color:[0,0,0,255]
+			domain:'sqli.com'
         },
+		serviceOverloads : {
+			color:[0,0,0,255]
+		},
         frequency:'15'
     };
 
@@ -24,9 +26,11 @@ if(typeof accounts !== 'undefined'){
         type:'gmail',
         serviceOptions : {
             accountNumber:0,
-            label:'newsletter',
-            color:[0,0,133,255]
+            label:'newsletter'
         },
+		serviceOverloads : {
+			color:[0,0,133,255]
+		},
         frequency:'15'
     };
 
