@@ -9,7 +9,8 @@
 	"permissions": [
 		"http://*/*",
 		"https://*/*",
-        "chrome://favicon/"
+        "chrome://favicon/",
+		"notifications"
 	],
 	"background_page" : "html/background.html",
 	"options_page": "html/options.html"

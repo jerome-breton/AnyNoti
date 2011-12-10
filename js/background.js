@@ -86,6 +86,7 @@ var background = {
                         }
                         if(this.service.implements.count){
 							results[this.index]['account'] = this;
+							results[this.index]['old_count'] = results[this.index]['count'] || 0;
                             results[this.index]['count'] = this.service.count();
                             if(this.service.implements.homeUrl){
                                 results[this.index]['url'] = this.service.homeUrl();
@@ -99,6 +100,9 @@ var background = {
 								results[this.index]['text'] += ' ('+results[this.index].count+')';
 							}
                             background.refreshBadge();
+							if(results[this.index]['old_count'] < results[this.index]['count']){
+								background.showToaster(this.index);
+							}
                         }
                     }
 				},
@@ -156,6 +160,18 @@ var background = {
         chrome.browserAction.setBadgeBackgroundColor({color:badgeColor});
 	},
 
+	//Shows the toaster of the given account
+	showToaster:function(index){	this._log('showToaster for account '+index);
+		//if (window.webkitNotifications.checkPermission() == 0) { // 0 is PERMISSION_ALLOWED
+		    var toast = window.webkitNotifications.createHTMLNotification('../html/popup.html?account='+index);
+			toast.ondisplay = function() {/* ... do something ... */};
+			toast.onclose = function() {/* ... do something else ... */};
+			toast.show();
+//		  } else {
+//		    window.webkitNotifications.requestPermission();
+//		  }
+	},
+
 	//Utility function for removing closed tag from tabs[], this permitting creating a new tab
     tabRemoved:function(tabId,removeInfo){ this._log('tabRemoved');
         var refreshFeeds = false;
@@ -174,4 +190,4 @@ var background = {
     }
 };
 
-$(function(){background.init();});
+jQuery(function(){background.init();});

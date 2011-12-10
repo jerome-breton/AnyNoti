@@ -1,5 +1,16 @@
 jQuery(function(){
+	var params = utils._extractUrlParams();
+	var toaster = false;
+
+	//Is an account specified ? Toaster case.
+	if(typeof params.account !== 'undefined'){
+		toaster = true;
+		utils._includeCss('../css/toaster.css');
+		//window.setTimeout(function(){	window.close();	}, 15000);
+	}
     jQuery.each(utils.getBackgroundPage().results,function(index, result){
+		//Leave if an account is specified and is not the one we are processing
+		if(toaster && params.account != index){	return;	}
 
 		//For each account, creation of a new section
         var accountSection = document.createElement("section");
@@ -7,13 +18,16 @@ jQuery(function(){
 
 		//With a title
         var accountTitle = document.createElement('h1');
-		accountTitle.innerText = result.text;
+		var accountTitleSpan = document.createElement('span');
+		accountTitleSpan.innerText = result.text;
+		accountTitle.appendChild(accountTitleSpan);
 		accountSection.appendChild(accountTitle);
 
 		//Linked to the home url of the account
         if(result.url){
             accountTitle.style.cursor="pointer";
             accountTitle.onclick=function(){
+				window.close();
                 result.account.openLink(result.url);
             };
         }
@@ -22,7 +36,7 @@ jQuery(function(){
         if(result.account.service.implements.favicon){
             var accountFavicon = document.createElement('img');
             accountFavicon.src = result.account.service.favicon();
-            accountTitle.appendChild(accountFavicon);
+            accountTitle.insertBefore(accountFavicon,accountTitleSpan);
         }
 
 		//With service color
@@ -56,6 +70,7 @@ jQuery(function(){
                 if(msg.link){
                     accountMessage.style.cursor="pointer";
                     accountMessage.onclick=function(){
+						window.close();
                         result.account.openLink(msg.link);
                     };
                 }
