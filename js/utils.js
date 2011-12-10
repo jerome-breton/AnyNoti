@@ -95,7 +95,37 @@ var utils = {
             utils._log('[color]'+msg);
         }
     },
+	loadServices:function(){   this._log('loadServices');
+		utils._include("../services/noop.js");
+		utils._include("../services/gmail.js");
+	},
+	_include:function(file){   this._log('_include '+file);
+		var script  = document.createElement('script');
+		script.src  = file;
+		script.type = 'text/javascript';
+		script.defer = true;
+		document.getElementsByTagName('head').item(0).appendChild(script);
+	},
+	_includeCss:function(file){   this._log('_includeCss '+file);
+		var stylesheet  = document.createElement('link');
+		stylesheet.href  = file;
+		stylesheet.type = 'text/css';
+		stylesheet.rel = 'stylesheet';
+		document.getElementsByTagName('head').item(0).appendChild(stylesheet);
+	},
+	_extractUrlParams:function(){   this._log('_extractUrlParams');
+		var paramsStrings = location.search.substring(1).split('&');
+		var params = {};
+		for (var i=0; i<paramsStrings.length; i++) {
+			var slices = paramsStrings[i].split('=');
+			params[slices[0]]=slices[1];
+		}
+		return params;
+	},
     _log:function(msg){ //return;
         console.log('[utils]'+msg);
     }
 };
+
+var services = [];
+jQuery(function(){utils.loadServices();});
