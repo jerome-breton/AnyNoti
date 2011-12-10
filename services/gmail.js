@@ -83,7 +83,7 @@ services['gmail'] = function(customOptions,logFn){
             if(options.domain){
                 return "chrome://favicon/http://"+options.domain+"/";
             }else{
-                return "chrome://favicon/http://gmail.com/";
+                return "chrome://favicon/http://mail.google.com/";
             }
         },
         color:function(){ this._log('color');
