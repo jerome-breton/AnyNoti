@@ -6,7 +6,7 @@ jQuery(function(){
 	if(typeof params.account !== 'undefined'){
 		toaster = true;
 		utils._includeCss('../css/toaster.css');
-		//window.setTimeout(function(){	window.close();	}, 15000);
+		window.setTimeout(function(){	window.close();	}, 15000);
 	}
     jQuery.each(utils.getBackgroundPage().results,function(index, result){
 		//Leave if an account is specified and is not the one we are processing
