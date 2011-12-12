@@ -4,16 +4,20 @@ body {
 }
 
 h1{
-	margin-top:-4px;
-}
-
-h1, article{
-    border-left:0 !important;
+	border-top:0 !important;
+	border-left:0 !important;
 	border-right:0 !important;
+	border-radius: 0 0 4px 4px !important;
 }
 
 h1 img{
 	border-left:0 !important;
+	border-radius: 0 0 4px 4px !important;
+}
+
+article{
+	border-left:0 !important;
+	border-right:0 !important;
 }
 
 article:last-child{
