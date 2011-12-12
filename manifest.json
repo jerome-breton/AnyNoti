@@ -2,8 +2,11 @@
 	"name": "AnyNoti",
 	"version": "0.0.1",
 	"description": "Extensible Multi Notification extension",
+	"icons": { "16": "img/green/icon16.png",
+	           "48": "img/green/icon48.png",
+	          "128": "img/green/icon128.png" },
 	"browser_action": {
-		"default_icon": "img/icon.png",
+		"default_icon": "img/green/icon48.png",
 		"popup": "html/popup.html"
 	},
 	"permissions": [

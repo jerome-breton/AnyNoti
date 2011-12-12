@@ -5,7 +5,7 @@ services['gmail'] = function(customOptions,logFn){
         label:null          //label to check, if empty, defaults to inbox
     };
     jQuery.extend(options,customOptions);
-    return jQuery.extend(services['noop'](customOptions,logFn),{
+    return jQuery.extend(services['rss'](customOptions,logFn),{
         _feed:'',
         implements:{
             refresh:true,
@@ -16,6 +16,10 @@ services['gmail'] = function(customOptions,logFn){
             color:true,
 			title:true
         },
+		parameters:{
+			preventTabReloading:true,	//Urls are opened with a trailing #0 preventing tab to be reload if the same url is called
+			itemHidingBehaviour:false
+		},
 		serviceCode:'gmail',
         options:options,
         refresh:function(callback){ this._log('refresh');

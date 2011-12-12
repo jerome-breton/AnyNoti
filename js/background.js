@@ -89,16 +89,30 @@ var background = {
 							results[this.index]['account'] = this;
 							results[this.index]['old_count'] = results[this.index]['count'] || 0;
                             results[this.index]['count'] = this.service.count();
+
+							//If the service can display a list of messages
+							if(this.service.implements.itemList){
+								var list = this.service.itemList.call(this.service);
+								var that=this;
+								jQuery.each(list,function(id,msg){
+									//Item is read ?
+									if(that.service.parameters.itemHidingBehaviour){
+										if(utils.items.isRead(that.index,id)){
+											results[that.index]['count']--;
+											delete list[id];
+										}
+									}
+								});
+								results[this.index]['list'] = list;
+							}
+
                             if(this.service.implements.homeUrl){
                                 results[this.index]['url'] = this.service.homeUrl();
                             }
 							if(this.service.implements.title && this.service.title()){
-								results[this.index]['text'] = this.service.title();
+								results[this.index]['title'] = this.service.title();
 							}else{
-								results[this.index]['text'] = this.name;
-							}
-							if(results[this.index].count>0){
-								results[this.index]['text'] += ' ('+results[this.index].count+')';
+								results[this.index]['title'] = this.name;
 							}
                             background.refreshBadge();
 							if(results[this.index]['old_count'] < results[this.index]['count']){
@@ -148,6 +162,7 @@ var background = {
         var badgeColor = null;
 		jQuery.each(results,function(index,result){
 			if(result.count){
+				result.text = result.title + ' ('+result.count+')';
 				var localCount = parseInt(result.count,10);
                 if(localCount<0){
                     results[index]['error'] = true;
@@ -156,6 +171,8 @@ var background = {
                     accounts += 1;
 					badgeColor = result.account.color() || badgeColor;
                 }
+			}else{
+				result.text = result.title;
 			}
 		});
 		if(count>0){
@@ -171,14 +188,9 @@ var background = {
 
 	//Shows the toaster of the given account
 	showToaster:function(index){	this._log('showToaster for account '+index);
-		//if (window.webkitNotifications.checkPermission() == 0) { // 0 is PERMISSION_ALLOWED
-		    var toast = window.webkitNotifications.createHTMLNotification('../html/popup.html?account='+index);
-			toast.ondisplay = function() {/* ... do something ... */};
-			toast.onclose = function() {/* ... do something else ... */};
-			toast.show();
-//		  } else {
-//		    window.webkitNotifications.requestPermission();
-//		  }
+		var toast = window.webkitNotifications.createHTMLNotification('../html/popup.html?account='+index);
+		toast.onclose = function() {/* mark as read all items ? */};
+		toast.show();
 	},
 
 	//Utility function for removing closed tag from tabs[], this permitting creating a new tab

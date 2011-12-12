@@ -3,6 +3,7 @@ body {
     min-width:500px;
     overflow-x:hidden;
     font-size: 11px;
+	margin-right: 16px;
 }
 
 h1{

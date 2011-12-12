@@ -12,7 +12,8 @@ services['noop'] = function(customOptions,logFn){
 			title:false
         },
 		parameters:{
-			preventTabReloading:true	//Urls are opened with a trailing #0 preventing tab to be reload if the same url is called
+			preventTabReloading:true,	//Urls are opened with a trailing #0 preventing tab to be reload if the same url is called
+			itemHidingBehaviour:false
 		},
 		serviceCode:'noop',
         options:options,

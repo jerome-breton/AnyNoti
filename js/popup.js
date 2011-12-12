@@ -6,7 +6,7 @@ jQuery(function(){
 	if(typeof params.account !== 'undefined'){
 		toaster = true;
 		utils._includeCss('../css/toaster.css');
-		window.setTimeout(function(){	window.close();	}, 15000);
+		window.setTimeout(function(){	window.close();	}, utils.options.toasterTimeout);
 	}
     jQuery.each(utils.getBackgroundPage().results,function(index, result){
 		//Leave if an account is specified and is not the one we are processing
@@ -27,6 +27,11 @@ jQuery(function(){
         if(result.url){
             accountTitle.style.cursor="pointer";
             accountTitle.onclick=function(){
+				if(result.list && result.account.service.parameters.itemHidingBehaviour==utils.constants.itemHidingBehaviour.onClick){
+					jQuery.each(result.list,function(id,msg){
+						utils.items.markAsRead(index,id);
+					});
+				}
 				window.close();
                 result.account.openLink(result.url);
             };
@@ -49,11 +54,14 @@ jQuery(function(){
 		accountTitle.style.borderColor = utils.color.toCssRgba(color[0]);
 		accountFavicon.style.borderColor = utils.color.toCssRgba(color[0]);
 
-		//If the service can display a list of messages
-        if(result.account.service.implements.itemList){
-            var list = result.account.service.itemList.call(result.account.service);
-			var zIndex = 8999;
-            jQuery.each(list,function(id,msg){
+		//If there is a list of messages
+        if(result.list){
+            var zIndex = 8999;
+            jQuery.each(result.list,function(id,msg){
+				//Mark as read on display ?
+				if(result.account.service.parameters.itemHidingBehaviour==utils.constants.itemHidingBehaviour.onDisplay){
+					utils.items.markAsRead(index,id);
+				}
 
 				//For each item we create an article
                 var accountMessage = document.createElement('article');
@@ -67,6 +75,9 @@ jQuery(function(){
                 if(msg.link){
                     accountMessage.style.cursor="pointer";
                     accountMessage.onclick=function(){
+						if(result.account.service.parameters.itemHidingBehaviour==utils.constants.itemHidingBehaviour.onClick){
+							utils.items.markAsRead(index,id);
+						}
 						window.close();
                         result.account.openLink(msg.link);
                     };
@@ -75,7 +86,7 @@ jQuery(function(){
 				//Message title
 				if(msg.title){
 					var accountMessageTitle = document.createElement('h2');
-					accountMessageTitle.innerText = msg.title;
+					accountMessageTitle.innerHTML = utils.stripTags(msg.title);
 					accountMessage.appendChild(accountMessageTitle);
 				}
 
@@ -83,11 +94,11 @@ jQuery(function(){
 				if (msg.author && (msg.author.name || msg.author.email)) {
 					var accountMessageAuthor = document.createElement('h3');
 					if(msg.author.name && !msg.author.email){
-						accountMessageAuthor.innerText = msg.author.name;
+						accountMessageAuthor.innerHTML = utils.stripTags(msg.author.name);
 					}else if(!msg.author.name && msg.author.email){
-						accountMessageAuthor.innerText = msg.author.email;
+						accountMessageAuthor.innerHTML = utils.stripTags(msg.author.email);
 					}else if(msg.author.name && msg.author.email){
-						accountMessageAuthor.innerText = msg.author.name + ' (' + msg.author.email + ')';
+						accountMessageAuthor.innerHTML = utils.stripTags(msg.author.name + ' (' + msg.author.email + ')');
 					}
 					accountMessage.appendChild(accountMessageAuthor);
 				}
@@ -95,7 +106,11 @@ jQuery(function(){
 				//Message body
 				if (msg.summary) {
 					var accountMessageSummary = document.createElement('p');
-					accountMessageSummary.innerText = msg.summary;
+					msg.summary = utils.stripTags(msg.summary);
+					if(msg.summary.length>utils.options.maxSummaryLength){
+						msg.summary = msg.summary.substr(0,msg.summary.substr(0,utils.options.maxSummaryLength).lastIndexOf(' '))+' ...';
+					}
+					accountMessageSummary.innerHTML = msg.summary;
 					accountMessage.appendChild(accountMessageSummary);
 				}
             });
